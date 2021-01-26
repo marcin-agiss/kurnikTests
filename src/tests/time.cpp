@@ -209,6 +209,38 @@ void testSelectColumntime(fstream& com) {
 	ignore("TE: setTime", com);
 	assert(404, "TE: alarm", "03:14", "alarm test with column set fault", com, "Alarm test column set ok");
 }
+
+void testSetOwnTimes(fstream& com) {
+	comSend("offset 0 0");
+	ignore("TE: setOffset", com);
+	comSend("openConfig 0 3");
+	ignore("TE: openConfig", com);
+	comSend("setOwnTimes 5 05:55 19:30");
+	ignore("TE: setOwnTimes", com);
+	comSend("setTime 01:00:00 1 05 0");
+	assert(500, "TE: alarm", "05:55", "alarm from own fault", com, "alarm from own open zima ok");
+	comSend("setTime 16:00:00 1 05 0");
+	assert(501, "TE: alarm", "19:30", "alarm from own fault", com, "alarm from own close zima ok");
+	comSend("setTime 01:00:00 1 05 1");
+	assert(502, "TE: alarm", "05:55", "alarm from own fault", com, "alarm from own open lato ok");
+	comSend("setTime 16:00:00 1 05 1");
+	assert(503, "TE: alarm", "19:30", "alarm from own fault", com, "alarm from own close lato ok");
+	//  check for offset
+	comSend("offset -20 10");
+	ignore("TE: setOffset", com);
+	comSend("openConfig 0 3");
+	ignore("TE: openConfig", com);
+	comSend("setOwnTimes 5 05:55 19:30");
+	ignore("TE: setOwnTimes", com);
+	comSend("setTime 01:00:00 1 05 0");
+	assert(504, "TE: alarm", "05:55", "alarm from own fault", com, "alarm from own open zima ofs ok");
+	comSend("setTime 16:00:00 1 05 0");
+	assert(505, "TE: alarm", "19:30", "alarm from own fault", com, "alarm from own close zima ofs ok");
+	comSend("setTime 01:00:00 1 05 1");
+	assert(506, "TE: alarm", "05:55", "alarm from own fault", com, "alarm from own open lato ofs ok");
+	comSend("setTime 16:00:00 1 05 1");
+	assert(507, "TE: alarm", "19:30", "alarm from own fault", com, "alarm from own close lato ofs ok");
+}
 /*
 	 * time & alarm format:
 	 * TE: time 18:43:10 4 03 1

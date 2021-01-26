@@ -81,6 +81,7 @@ void tests(fstream& com, int testId) {
 	if (testId <=200 ) alarmTest(com);
 	if (testId <=300 ) alarmOffsetTest(com);
 	if (testId <=400 ) testSelectColumntime(com);
+	if (testId <=500 )testSetOwnTimes(com);
 }
 
 
